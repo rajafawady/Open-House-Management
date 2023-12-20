@@ -3,70 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Evaluation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::latest()->get();
+        if (!(Auth::user()->role == 'admin' || Auth::user()->role == 'guest')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $projects = Project::latest()
+    ->orderByRaw('location IS NULL DESC, location ASC, id DESC')
+    ->get();
         return view('/admin/dashboard', compact('projects'));
     }
 
     public function show(Project $project)
     {
+        if (!(Auth::user()->role == 'admin' || Auth::user()->role == 'guest')) {
+            abort(403, 'Unauthorized action.');
+        }
         $availableLocations=$this->availableLocations();
         return view('projects/project',["availableLocations"=>$availableLocations, "project"=>$project]);
-    }
-
-    public function create()
-    {
-        return view('project.create');
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-        ]);
-
-        Project::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-        ]);
-
-        return redirect()->route('projects.index')->with('success', 'Project created successfully');
-    }
-
-    public function edit($id)
-    {
-        $project = Project::findOrFail($id);
-        return view('project.edit', compact('project'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-        ]);
-
-        $project = Project::findOrFail($id);
-        $project->update([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-        ]);
-
-        return redirect()->route('projects.index')->with('success', 'Project updated successfully');
-    }
-
-    public function destroy($id)
-    {
-        $project = Project::findOrFail($id);
-        $project->delete();
-
-        return redirect()->route('projects.index')->with('success', 'Project deleted successfully');
     }
 
     public function availableLocations()
@@ -85,6 +45,9 @@ class ProjectController extends Controller
 
     public function assignLocation($projectId, $locationId)
     {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
 
         $project = Project::find($projectId);
 
@@ -92,8 +55,109 @@ class ProjectController extends Controller
             $project->location = $locationId;
             $project->save();
 
-            return redirect("/projects/$projectId")->with(['message' => 'Location assigned successfully']);
+            return redirect("/admin/dashboard")->with(['message' => "Location assigned successfully for Project $projectId"]);
         }
         return redirect("/projects/$projectId")->with(['message' => 'Location assignment Failed']);
     }
+
+    public function showEvaluations($projectId)
+    {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+        $project = Project::findOrFail($projectId);
+        $evaluations = Evaluation::where('project_id', $project->id)->whereNotNull('rating')
+        ->with('evaluator')
+        ->get();
+        return view('admin.show_evaluations', compact('project', 'evaluations'));
+    }
+
+    public function showStudentProject()
+    {
+        if (Auth::user()->role !== 'student') {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = Auth::user();
+        $project=null;
+
+        if($user->projects){
+            $project = $user->projects->first();
+        }
+
+        return view('student.project.show', compact('project'));
+    }
+
+    /**
+     * Store a new project for the student.
+     */
+    public function storeStudentProject(Request $request)
+    {
+        if (Auth::user()->role !== 'student') {
+            abort(403, 'Unauthorized action.');
+        }
+        // Validate and store the project details
+        $formFields=$request->validate([
+            'title' => 'required|string',
+            'tags' => 'required',
+            'description' => 'required|string',
+            'picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048', 
+        ]);
+     
+        if($request->hasFile('picture')) {
+            $formFields['picture'] = $request->file('picture')->store('pictures', 'public');
+        }
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Create a new project
+        $project = Project::create($formFields);
+
+        // Attach the project to the user
+        $user->projects()->attach($project->id);
+
+        return redirect()->route('student.project.show')->with('message', 'Project added successfully!');
+    }
+
+    public function editProject()
+    {
+        if (Auth::user()->role !== 'student') {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = Auth::user();
+        $project = $user->projects;
+        if($project){
+            $project=$project->first();
+        }
+        return view('student.project.edit-project', compact('project'));
+    }
+
+    public function updateProject(Request $request)
+    {
+        if (Auth::user()->role !== 'student') {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = Auth::user();
+        $project = $user->projects;
+        if($project){
+            $project=$project->first();
+        }
+
+        $formFields=$request->validate([
+            'title' => 'required|string',
+            'tags' => 'required',
+            'description' => 'required|string',
+            'picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048', 
+        ]);
+
+        if($request->hasFile('picture')) {
+            $formFields['picture'] = $request->file('picture')->store('pictures', 'public');
+        }
+
+        $project->update($formFields);
+
+        return redirect()->route('student.project.show')->with('message', 'Project updated successfully!');
+    }
+
+
 }

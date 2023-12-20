@@ -9,37 +9,29 @@
           <h3 class="text-2xl mb-2">
             {{$project->title}}
           </h3>
-          {{--}}<div class="text-xl font-bold mb-4">{{$listing->company}}</div>
-  
-         
-  
-          <div class="text-lg my-4">
-            <i class="fa-solid fa-location-dot"></i> {{$listing->location}}
-          </div>{{--}}
+
+          <x-project-tags :tags="$project->tags" />
+            
           <div class="border border-gray-200 w-full mb-6"></div>
           <div>
             <h3 class="text-3xl font-bold mb-4">Project Description</h3>
             <div class="text-lg space-y-6">
               {{$project->description}}
-  
-              {{--}}<a href="mailto:{{$listing->email}}"
-                class="block bg-laravel text-white mt-6 py-2 rounded-xl hover:opacity-80"><i
-                  class="fa-solid fa-envelope"></i>
-                Contact Employer</a>
-  
-              <a href="{{$listing->website}}" target="_blank"
-                class="block bg-black text-white py-2 rounded-xl hover:opacity-80"><i class="fa-solid fa-globe"></i>
-                Visit Website</a>{{--}}
+
             </div>
           </div>
         </div>
-        <div class="border border-gray-200 w-full mb-6"></div>
+        
         @if(!$project->isAssigned() && auth()->user()->role=="admin")
+        <div class="border border-gray-200 w-full mb-6"></div>
         <x-locations :projectId="$project->id" :availableLocations="$availableLocations"></x-locations>
+        @elseif($project->isAssigned() && auth()->user()->role=="admin")
+        <div class="border border-gray-200 w-full mb-6"></div>
+        <p class="text-lg mb-4 text-center">View Project <a class="underline text-blue-500" href="/projects/{{$project->id}}/evaluations">ratings</a>.</p>
         @endif
 
-        @if(auth()->user()->role=="guest")
-          <x-rating-form />
+        @if(auth()->user()->role=="guest" && !$project->getUserRating($project->id))
+          <x-rating-form :projectId="$project->id" />
         @endif
       </x-card>
     </div>

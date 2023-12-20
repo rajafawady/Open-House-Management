@@ -14,6 +14,7 @@ class ProjectFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
+            'tags' => ('AI, Web, Tech'),
             'location' => null, // Initial projects are unassigned
         ];
     }

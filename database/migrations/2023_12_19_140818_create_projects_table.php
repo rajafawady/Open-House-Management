@@ -12,6 +12,8 @@ class CreateProjectsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->text('tags');
+            $table->string('picture')->nullable();
             $table->integer('location')->nullable(); // Nullable because initially unassigned
             $table->timestamps();
         });

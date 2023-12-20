@@ -26,36 +26,50 @@
 </head>
 
 <body class="mb-48">
-  <nav class="flex justify-between items-center mb-4 bg-red-500 h-[10vh]">
-    @if(isset(auth()->user()->role) && auth()->user()->role=="admin")
-    <a href="/admin/dashboard">Dashboard</a>
-    @elseif(isset(auth()->user()->role) && auth()->user()->role=="guest")
-    <a href="/guest/home">Dashboard</a>
-    @else
-    <a href="/student/home">Dashboard</a>
-    @endif
+  <nav class="flex justify-between items-center mb-4 bg-red-500 h-[10vh] text-white">
+    <span class="font-bold uppercase ml-3">
+      Welcome @auth{{auth()->user()->name}}@endauth
+    </span>
+    
 
     <ul class="flex space-x-6 mr-6 text-lg">
       @auth
       <li>
-        <span class="font-bold uppercase">
-          Welcome {{auth()->user()->name}}
+        @if(isset(auth()->user()->role) && auth()->user()->role=="admin")
+        <a href="/admin/dashboard">Dashboard</a>
+        @elseif(isset(auth()->user()->role) && auth()->user()->role=="guest")
+        <a href="/guest/home">Dashboard</a>
+        @else
+        <a href="/student/project">Dashboard</a>
+        @endif
+      </li>
+      @if(isset(auth()->user()->role) && auth()->user()->role=="guest")
+      <li>
+        <span>
+          <a href="/guest/preferences">Preferences</a>
         </span>
       </li>
+      @elseif(isset(auth()->user()->role) && auth()->user()->role=="student")
+      <li>
+        <span>
+          <a href="/student/project/edit">Edit Project</a>
+        </span>
+      </li>
+      @endif
       <li>
         <form class="inline" method="POST" action="/user/logout">
           @csrf
           <button type="submit">
-            <i class="fa-solid fa-door-closed"></i> Logout
+          Logout <i class="fa-solid fa-arrow-right-from-bracket"></i>
           </button>
         </form>
       </li>
       @else
       <li>
-        <a href="/register" class="hover:text-laravel"><i class="fa-solid fa-user-plus"></i> Register</a>
+        <a href="/register" class="hover:text-black"><i class="fa-solid fa-user-plus"></i> Register</a>
       </li>
       <li>
-        <a href="/login" class="hover:text-laravel"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</a>
+        <a href="/login" class="hover:text-black"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</a>
       </li>
       @endauth
     </ul>

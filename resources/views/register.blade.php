@@ -52,10 +52,6 @@
         <label class="text-lg" for="">Register As</label>
         <div class="mb-6 flex justify-start align-center">
             <div class="flex m-auto w-[10%] gap-x-3 align-center">
-                <input type="radio" class="border border-gray-200 rounded p-2 w-full" name="role" value="admin"/>
-                <label for="role" class="text-lg">Admin</label>
-            </div>
-            <div class="flex m-auto w-[10%] gap-x-3 align-center">
                 <input type="radio" class="border border-gray-200 rounded p-2 w-full" name="role" value="guest"/>
                 <label for="role" class="text-lg">Guest</label>
             </div>

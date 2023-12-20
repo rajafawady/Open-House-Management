@@ -22,7 +22,7 @@ class UserController extends Controller
             $user->role = $formFields['role']; // Set the user's role accordingly
 
             if ($formFields['role'] == 'student') {
-                return redirect('/student/home')->with('message', 'You are logged in as FYP Group!');
+                return redirect('/student/project')->with('message', 'You are logged in as FYP Group!');
             }elseif($formFields['role'] == 'guest') {
                 return redirect('/guest/home')->with('message', 'You are logged in as Guest!');
             }elseif($formFields['role'] == 'admin') {
@@ -50,8 +50,11 @@ class UserController extends Controller
 
         // Login
         auth()->login($user);
-
-        return redirect('/')->with('message', 'User created and logged in');
+        if ($formFields['role'] == 'student') {
+            return redirect('/student/project')->with('message', 'User created and logged in');
+        }elseif($formFields['role'] == 'guest') {
+            return redirect('/guest/home')->with('message', 'User created and logged in');
+        }
     }
 
     public function logout(Request $request){

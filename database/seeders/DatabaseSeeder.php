@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,12 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $formFields=
+            [
+                'name'=>'Raja Fawad',
+                'email'=>'rajafawady@gmail.com',
+                'role'=>'admin',
+                'password'=>'fawadhihun',
+            ];
+            // Hash Password
+        $formFields['password'] = bcrypt($formFields['password']);
+        // Create User
+         User::create($formFields);
         $this->call([
             ProjectSeeder::class,
             // Add other seeders as needed

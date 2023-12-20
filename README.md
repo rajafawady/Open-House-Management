@@ -44,6 +44,61 @@ The Open House Management System is a web application designed to streamline the
    git clone https://github.com/your-username/open-house-management.git
    cd open-house-management
 
+2. **Install PHP Dependencies:**
+    ```bash
+    composer install
+    ```
+
+3. **Create a copy of the `.env` file:**
+    ```bash
+    cp .env.example .env
+    ```
+
+4. **Generate an application key:**
+    ```bash
+    php artisan key:generate
+    ```
+
+5. **Configure the database in the `.env` file.**
+
+6. **Run database migrations:**
+    ```bash
+    php artisan migrate
+    ```
+
+7. **Install Frontend Dependencies:**
+    ```bash
+    npm install
+    ```
+
+8. **Compile Assets:**
+    ```bash
+    npm run dev
+    ```
+
+## Usage
+
+1. **Start the Laravel Development Server:**
+    ```bash
+    php artisan serve
+    ```
+
+2. **Visit [http://localhost:8000](http://localhost:8000) in your web browser.**
+
+3. **Administer the application using the provided admin panel.**
+
+## Configuration
+
+- Configure mail settings in the `.env` file if your application involves sending emails.
+- Set up a mail driver, such as SMTP, in the `.env` file.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request.
+
+## License
+
+This project is licensed under the MIT License.
 
 
 

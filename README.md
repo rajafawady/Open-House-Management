@@ -83,9 +83,8 @@ The Open House Management System is a web application designed to streamline the
     php artisan serve
     ```
 
-2. **Visit [http://localhost:8000](http://localhost:8000) in your web browser.**
 
-3. **Administer the application using the provided admin panel.**
+2. **Administer the application using the provided admin panel.**
 
 ## Configuration
 

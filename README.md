@@ -5,7 +5,7 @@ The Open House Management System is a web application designed to streamline the
 ## Features
 
 - **User Roles:**
-  - **Admins:** Manage users, projects, and evaluations.
+  - **Admins:** Manage users, projects, and evaluations
   - **Evaluators:** Rate assigned projects.
   - **Guests:** Submit preferred keywords for project assignments.
 

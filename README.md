@@ -1,3 +1,53 @@
+# Open House Management System
+
+The Open House Management System is a web application designed to streamline the management of open house events. It allows evaluators to rate projects, administrators to oversee the entire process, and guests to submit preferred keywords for project assignments.
+
+## Features
+
+- **User Roles:**
+  - **Admins:** Manage users, projects, and evaluations.
+  - **Evaluators:** Rate assigned projects.
+  - **Guests:** Submit preferred keywords for project assignments.
+
+- **Project Assignment:**
+  - Projects are assigned to evaluators based on matching keywords and preferences.
+  - Each evaluator is assigned to evaluate 3-5 projects.
+
+- **Rating System:**
+  - Evaluators can rate projects on a scale of 1-10.
+  - Ratings are visible only to admins.
+
+- **Preferences:**
+  - Guests can submit preferred project categories and specialty areas.
+
+## Technologies Used
+
+- **Backend:**
+  - [Laravel](https://laravel.com/): PHP web application framework.
+
+- **Frontend:**
+  - [Blade](https://laravel.com/docs/8.x/blade): Laravel's templating engine.
+  - [Tailwind CSS](https://tailwindcss.com/): Utility-first CSS framework.
+
+- **Database:**
+  - [MySQL](https://www.mysql.com/): Open-source relational database management system.
+
+- **Other Tools:**
+  - [Composer](https://getcomposer.org/): Dependency manager for PHP.
+  - [npm](https://www.npmjs.com/): Package manager for Node.js.
+  - [Git](https://git-scm.com/): Version control system.
+
+## Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/open-house-management.git
+   cd open-house-management
+
+
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
